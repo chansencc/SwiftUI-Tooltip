@@ -80,6 +80,9 @@ struct TooltipModifier<TooltipContent: View>: ViewModifier {
     // MARK: - Helper functions
 
     private func offsetHorizontal(_ g: GeometryProxy) -> CGFloat {
+        if let offset = config.arrowOffset {
+            return offset
+        }
         switch config.side {
         case .left, .topLeft, .bottomLeft:
             return -(contentWidth + config.margin + actualArrowHeight + animationOffset)
@@ -226,6 +229,7 @@ struct Tooltip_Previews: PreviewProvider {
     static var previews: some View {
         var config = DefaultTooltipConfig(side: .top)
         config.enableAnimation = false
+        config.arrowOffset = -20
 //        config.backgroundColor = Color(red: 0.8, green: 0.9, blue: 1)
 //        config.animationOffset = 10
 //        config.animationTime = 1
