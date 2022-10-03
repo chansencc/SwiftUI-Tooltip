@@ -38,6 +38,9 @@ struct TooltipModifier<TooltipContent: View>: ViewModifier {
     var arrowOffsetX: CGFloat {
         switch config.side {
         case .bottom, .center, .top:
+            if let offset = config.arrowOffset {
+                return offset
+            }
             return 0
         case .left:
             return (contentWidth / 2 + config.arrowHeight / 2)
@@ -80,7 +83,7 @@ struct TooltipModifier<TooltipContent: View>: ViewModifier {
     // MARK: - Helper functions
 
     private func offsetHorizontal(_ g: GeometryProxy) -> CGFloat {
-        if let offset = config.arrowOffset {
+        if let offset = config.bodyOffset {
             return offset
         }
         switch config.side {
@@ -227,20 +230,17 @@ struct TooltipModifier<TooltipContent: View>: ViewModifier {
 
 struct Tooltip_Previews: PreviewProvider {
     static var previews: some View {
-        var config = DefaultTooltipConfig(side: .top)
+        var config = DefaultTooltipConfig(side: .bottom)
         config.enableAnimation = false
-        config.arrowOffset = -20
-//        config.backgroundColor = Color(red: 0.8, green: 0.9, blue: 1)
-//        config.animationOffset = 10
-//        config.animationTime = 1
-//        config.width = 120
-//        config.height = 80
-        
-        
+        config.arrowOffset = -30
+        config.bodyOffset = -30
+                
         return VStack {
-            Text("Say...").tooltip(config: config) {
+            Image(systemName: "circle.fill")
+                .tooltip(config: config) {
                 Text("Something nice!")
             }
-        }.previewDevice(.init(stringLiteral: "iPhone 12 mini"))
+        }
+        .previewDevice(.init(stringLiteral: "iPhone 12 mini"))
     }
 }
